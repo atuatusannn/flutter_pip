@@ -55,7 +55,7 @@ class _MyHomePageState extends State<MyHomePage> {
         BetterPlayerConfiguration(aspectRatio: 16 / 9, fit: BoxFit.contain);
     BetterPlayerDataSource dataSource = BetterPlayerDataSource(
       BetterPlayerDataSourceType.network,
-      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+      "http://sample.vodobox.com/skate_phantom_flex_4k/skate_phantom_flex_4k.m3u8",
     );
     _betterPlayerController = BetterPlayerController(betterPlayerConfiguration);
     _betterPlayerController.setupDataSource(dataSource);
@@ -77,7 +77,8 @@ class _MyHomePageState extends State<MyHomePage> {
     );
     BetterPlayerDataSource dataSource = BetterPlayerDataSource(
       BetterPlayerDataSourceType.network,
-      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+      // "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+        "http://sample.vodobox.com/skate_phantom_flex_4k/skate_phantom_flex_4k.m3u8"
     );
     _betterPlayerController = BetterPlayerController(betterPlayerConfiguration);
     await _betterPlayerController.setupDataSource(dataSource);
@@ -93,31 +94,35 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
         body: Column(
           children: [
+            // BetterPlayer.network(
+            //   "http://sample.vodobox.com/skate_phantom_flex_4k/skate_phantom_flex_4k.m3u8"
+            // ),
             SizedBox(
-              // width: 300,
-              child: AspectRatio(
-                aspectRatio: 16 / 9,
-                child: BetterPlayer(
-                  controller: _betterPlayerController,
-                  key: _betterPlayerKey,
-                ),
+              width: 300,
+              child: BetterPlayer(
+                controller: _betterPlayerController,
+                key: _betterPlayerKey,
               ),
             ),
             ElevatedButton(
                 onPressed: () async {
-                  await OpenPip();
+                  Timer.periodic(
+                    await Duration(seconds: 1),(time)async{
+                      print(await _betterPlayerController.isPictureInPictureSupported());
+                    }
+                  );
+                  // await OpenPip();
 
-                  setState(() {
-                    _betterPlayerController
-                        .enablePictureInPicture(_betterPlayerKey)
-                        ?.then((value) {
-                      print("xxxxxxx");
-                    }).catchError((e) {
-                      print(e);
-                    });
-                  });
-                  // await _betterPlayerController
-                  //     .enablePictureInPicture(_betterPlayerKey);
+                    // _betterPlayerController
+                    //     .enablePictureInPicture(_betterPlayerKey)
+                    //     ?.then((value) {
+                    //   print("xxxxxxx");
+                    // }).catchError((e) {
+                    //   print(e);
+                    // });
+                  
+                  await _betterPlayerController
+                      .enablePictureInPicture(_betterPlayerKey);
                 },
                 child: Text("pip")),
             ElevatedButton(
